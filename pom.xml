@@ -73,6 +73,7 @@
 
     <modules>
         <module>hystrix</module>
+        <module>feign</module>
     </modules>
 
     <scm>
