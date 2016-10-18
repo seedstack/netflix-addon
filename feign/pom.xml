@@ -48,6 +48,8 @@
             <artifactId>feign-slf4j</artifactId>
             <version>${feign.version}</version>
         </dependency>
+
+        <!-- TESTS -->
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
