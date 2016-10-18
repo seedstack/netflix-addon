@@ -6,6 +6,7 @@
  */
 package org.seedstack.netflix.feign.internal;
 
+import feign.Logger;
 import feign.codec.Decoder;
 import feign.codec.Encoder;
 import org.seedstack.coffig.Config;
@@ -38,6 +39,14 @@ public class FeignConfig {
 
         private Class<Decoder> decoder;
 
+        private Class<Logger> logger;
+
+        /**
+         * NONE, BASIC, HEADERS, FULL
+         * @see Logger.Level
+         */
+        private String logLevel;
+
         public URL getBaseUrl() {
             return baseUrl;
         }
@@ -62,6 +71,24 @@ public class FeignConfig {
 
         public EndpointConfig setDecoder(Class<Decoder> decoder) {
             this.decoder = decoder;
+            return this;
+        }
+
+        public Class<Logger> getLogger() {
+            return logger;
+        }
+
+        public EndpointConfig setLogger(Class<Logger> logger) {
+            this.logger = logger;
+            return this;
+        }
+
+        public String getLogLevel() {
+            return logLevel;
+        }
+
+        public EndpointConfig setLogLevel(String logLevel) {
+            this.logLevel = logLevel;
             return this;
         }
     }
