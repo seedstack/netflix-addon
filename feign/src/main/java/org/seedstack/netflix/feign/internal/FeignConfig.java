@@ -22,7 +22,7 @@ import java.util.Map;
 public class FeignConfig {
     private Map<Class<?>, EndpointConfig> endpoints = new HashMap<>();
 
-    public Map<Class<?>, EndpointConfig> getEndpoints() {
+    Map<Class<?>, EndpointConfig> getEndpoints() {
         return Collections.unmodifiableMap(endpoints);
     }
 
@@ -43,9 +43,12 @@ public class FeignConfig {
 
         /**
          * NONE, BASIC, HEADERS, FULL
+         *
          * @see Logger.Level
          */
         private String logLevel;
+
+        private Boolean wrappedWithHystrix;
 
         public URL getBaseUrl() {
             return baseUrl;
@@ -89,6 +92,15 @@ public class FeignConfig {
 
         public EndpointConfig setLogLevel(String logLevel) {
             this.logLevel = logLevel;
+            return this;
+        }
+
+        public Boolean isWrappedWithHystrix() {
+            return wrappedWithHystrix;
+        }
+
+        public EndpointConfig setWrappedWithHystrix(Boolean wrappedWithHystrix) {
+            this.wrappedWithHystrix = wrappedWithHystrix;
             return this;
         }
     }

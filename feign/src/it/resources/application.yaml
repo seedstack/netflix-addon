@@ -8,6 +8,9 @@
 feign:
   endpoints:
     org.seedstack.netflix.feign.fixtures.TestAPI:
-     baseUrl: http://test.url.com/
-     encoder: feign.jackson.JacksonEncoder
-#     decoder: feign.jackson.JacksonDecoder
+      baseUrl: https://api.github.com
+#      encoder: feign.jackson.JacksonEncoder
+#      decoder: feign.gson.GsonDecoder
+      wrappedWithHystrix: false
+#      logger: feign.slf4j.Slf4jLogger
+#      logLevel: FULL

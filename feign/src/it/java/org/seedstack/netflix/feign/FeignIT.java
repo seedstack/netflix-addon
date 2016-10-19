@@ -21,5 +21,7 @@ public class FeignIT extends AbstractSeedIT {
     @Test
     public void test_API() {
         assertThat(testAPI).isNotNull();
+        TestAPI.Post post = testAPI.getPost(1);
+        System.out.println(post);
     }
 }

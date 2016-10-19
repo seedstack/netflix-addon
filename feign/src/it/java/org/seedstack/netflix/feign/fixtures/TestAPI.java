@@ -6,17 +6,21 @@
  */
 package org.seedstack.netflix.feign.fixtures;
 
+import feign.Headers;
+import feign.Param;
 import feign.RequestLine;
-import feign.Response;
-import org.seedstack.seed.it.ITBind;
 
+@Headers("Accept: application/json")
 public interface TestAPI {
-    @RequestLine("POST /messages")
-    Response postMessage(String message);
 
-    static class Message {
+    @RequestLine("GET /posts/{id}")
+    Post getPost(@Param("id") int id);
+
+    class Post {
+        public String userId;
+        public int id;
+        public String title;
         public String body;
-        public String author;
     }
 
 }
