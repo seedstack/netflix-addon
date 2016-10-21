@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2013-2016, The SeedStack authors <http://seedstack.org>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -7,8 +7,10 @@
  */
 package org.seedstack.netflix.feign.internal;
 
-import org.seedstack.seed.ErrorCode;
-
-public enum FeignErrorCode implements ErrorCode {
-    INSTANTIATION_ENCODER_ERROR, INSTANTIATION_DECODER_ERROR, INSTANTIATION_FALLBACK_ERROR, INSTANTIATION_LOGGER_ERROR
+/**
+ * Parent interface for all the Feign interfaces
+ *
+ * @author adrien.domurado@gmail.com
+ */
+public interface FeignApi {
 }

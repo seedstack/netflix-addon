@@ -1,5 +1,6 @@
 /**
  * Copyright (c) 2013-2016, The SeedStack authors <http://seedstack.org>
+ *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
@@ -12,13 +13,14 @@ import io.nuun.kernel.api.plugin.request.ClasspathScanRequest;
 import org.kametic.specifications.Specification;
 import org.seedstack.seed.core.internal.AbstractSeedPlugin;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
 public class FeignPlugin extends AbstractSeedPlugin {
     static final Specification<Class<?>> feignInterfaceSpecification = new FeignInterfaceSpecification();
 
-    private Collection<Class<?>> feignApis;
+    private Collection<Class<FeignApi>> feignApis = new ArrayList<>();
 
     @Override
     public String name() {
@@ -36,7 +38,7 @@ public class FeignPlugin extends AbstractSeedPlugin {
     protected InitState initialize(InitContext initContext) {
         Map<Specification, Collection<Class<?>>> scannedClasses = initContext.scannedTypesBySpecification();
 
-        feignApis = scannedClasses.get(FeignPlugin.feignInterfaceSpecification);
+        configureFeignApi(scannedClasses.get(feignInterfaceSpecification));
 
         return InitState.INITIALIZED;
     }
@@ -44,5 +46,16 @@ public class FeignPlugin extends AbstractSeedPlugin {
     @Override
     public Object nativeUnitModule() {
         return new FeignModule(feignApis);
+    }
+
+    @SuppressWarnings("unchecked")
+    private void configureFeignApi(Collection<Class<?>> apiClasses) {
+        if (apiClasses != null) {
+            for (Class<?> apiCandidateClass : apiClasses) {
+                if (FeignApi.class.isAssignableFrom(apiCandidateClass)) {
+                    this.feignApis.add((Class<FeignApi>) apiCandidateClass);
+                }
+            }
+        }
     }
 }

@@ -1,5 +1,6 @@
 /**
  * Copyright (c) 2013-2016, The SeedStack authors <http://seedstack.org>
+ *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
@@ -49,6 +50,8 @@ public class FeignConfig {
         private String logLevel;
 
         private Boolean wrappedWithHystrix;
+
+        private Class<FeignApi> fallback;
 
         public URL getBaseUrl() {
             return baseUrl;
@@ -101,6 +104,15 @@ public class FeignConfig {
 
         public EndpointConfig setWrappedWithHystrix(Boolean wrappedWithHystrix) {
             this.wrappedWithHystrix = wrappedWithHystrix;
+            return this;
+        }
+
+        public Class<FeignApi> getFallback() {
+            return fallback;
+        }
+
+        public EndpointConfig setFallback(Class<FeignApi> fallback) {
+            this.fallback = fallback;
             return this;
         }
     }

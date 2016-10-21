@@ -1,5 +1,6 @@
 /**
  * Copyright (c) 2013-2016, The SeedStack authors <http://seedstack.org>
+ *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
@@ -21,21 +22,21 @@ import org.seedstack.seed.core.utils.SeedReflectionUtils;
 import javax.inject.Provider;
 import java.util.Optional;
 
-class FeignProvider implements Provider<Object> {
+class FeignProvider implements Provider<FeignApi> {
 
     private static final Optional<Class<Object>> HYSTRIX_OPTIONAL = SeedReflectionUtils.optionalOfClass("com.netflix.hystrix.Hystrix");
 
     @Configuration
     private FeignConfig config;
 
-    private Class<?> feignApi;
+    private Class<FeignApi> feignApi;
 
-    FeignProvider(Class<?> feignApi) {
+    FeignProvider(Class<FeignApi> feignApi) {
         this.feignApi = feignApi;
     }
 
     @Override
-    public Object get() {
+    public FeignApi get() {
         FeignConfig.EndpointConfig endpointConfig = config.getEndpoints().get(feignApi);
         Feign.Builder builder;
         // 3 modes :
@@ -59,6 +60,7 @@ class FeignProvider implements Provider<Object> {
         Class<Encoder> encoderClass = endpointConfig.getEncoder();
         Class<Decoder> decoderClass = endpointConfig.getDecoder();
         Class<Logger> loggerClass = endpointConfig.getLogger();
+        Class<FeignApi> fallback = endpointConfig.getFallback();
         if (encoderClass != null) {
             builder = builder.encoder(instantiateEncoder(encoderClass));
         } else {
@@ -96,8 +98,23 @@ class FeignProvider implements Provider<Object> {
             builder = builder.logLevel(Logger.Level.NONE);
         }
 
+        FeignApi result;
+        if (fallback != null && builder instanceof HystrixFeign.Builder) {
+            result = ((HystrixFeign.Builder) builder).target(feignApi, endpointConfig.getBaseUrl().toExternalForm(), instantiateFallback(fallback));
+        } else {
+            result = builder.target(feignApi, endpointConfig.getBaseUrl().toExternalForm());
+        }
 
-        return builder.target(feignApi, endpointConfig.getBaseUrl().toExternalForm());
+        return result;
+    }
+
+    private FeignApi instantiateFallback(Class<FeignApi> fallback) {
+        try {
+            return fallback.newInstance();
+        } catch (Exception e) {
+            throw SeedException.wrap(e, FeignErrorCode.INSTANTIATION_FALLBACK_ERROR)
+                    .put("class", fallback);
+        }
     }
 
     private Encoder instantiateEncoder(Class<Encoder> encoderClass) {

@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2013-2016, The SeedStack authors <http://seedstack.org>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -7,17 +7,14 @@
  */
 package org.seedstack.netflix.feign.fixtures;
 
-import feign.Headers;
-import feign.RequestLine;
-import org.seedstack.netflix.feign.internal.FeignApi;
+public class TestFallback implements TestAPI {
+    @Override
+    public Message getMessage() {
+        return new Message("Fallback response", "fallback");
+    }
 
-@Headers("Accept: application/json")
-public interface TestAPI extends FeignApi {
-
-    @RequestLine("GET /message")
-    Message getMessage();
-
-    @RequestLine("GET /404")
-    Message get404();
-
+    @Override
+    public Message get404() {
+        return new Message("Error code: 404 !", "fallback");
+    }
 }

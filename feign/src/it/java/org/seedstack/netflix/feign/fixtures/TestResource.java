@@ -7,17 +7,17 @@
  */
 package org.seedstack.netflix.feign.fixtures;
 
-import feign.Headers;
-import feign.RequestLine;
-import org.seedstack.netflix.feign.internal.FeignApi;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
-@Headers("Accept: application/json")
-public interface TestAPI extends FeignApi {
+@Path("/message")
+public class TestResource {
 
-    @RequestLine("GET /message")
-    Message getMessage();
-
-    @RequestLine("GET /404")
-    Message get404();
-
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Message say() {
+        return new Message("Hello World !", "computer");
+    }
 }
