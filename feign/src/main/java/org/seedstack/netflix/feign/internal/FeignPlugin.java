@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2013-2016, The SeedStack authors <http://seedstack.org>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -16,9 +16,10 @@ import org.seedstack.seed.core.internal.AbstractSeedPlugin;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class FeignPlugin extends AbstractSeedPlugin {
-    static final Specification<Class<?>> feignInterfaceSpecification = new FeignInterfaceSpecification();
+    private static final Specification<Class<?>> feignInterfaceSpecification = new FeignInterfaceSpecification();
 
     private Collection<Class<FeignApi>> feignApis = new ArrayList<>();
 
@@ -51,11 +52,7 @@ public class FeignPlugin extends AbstractSeedPlugin {
     @SuppressWarnings("unchecked")
     private void configureFeignApi(Collection<Class<?>> apiClasses) {
         if (apiClasses != null) {
-            for (Class<?> apiCandidateClass : apiClasses) {
-                if (FeignApi.class.isAssignableFrom(apiCandidateClass)) {
-                    this.feignApis.add((Class<FeignApi>) apiCandidateClass);
-                }
-            }
+            this.feignApis.addAll(apiClasses.stream().filter(FeignApi.class::isAssignableFrom).map(apiCandidateClass -> (Class<FeignApi>) apiCandidateClass).collect(Collectors.toList()));
         }
     }
 }

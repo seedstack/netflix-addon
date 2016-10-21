@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2013-2016, The SeedStack authors <http://seedstack.org>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -7,10 +7,7 @@
  */
 package org.seedstack.netflix.feign;
 
-import feign.Feign;
-import feign.jackson.JacksonDecoder;
 import org.jboss.arquillian.container.test.api.Deployment;
-import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.Test;
@@ -20,14 +17,10 @@ import org.seedstack.netflix.feign.fixtures.TestResource;
 import org.seedstack.seed.it.AbstractSeedWebIT;
 
 import javax.inject.Inject;
-import java.net.URL;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class FeignIT extends AbstractSeedWebIT {
-
-    @ArquillianResource
-    private URL baseURL;
 
     @Inject
     private TestAPI testAPI;

@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2013-2016, The SeedStack authors <http://seedstack.org>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -18,7 +18,7 @@ import static org.seedstack.seed.core.utils.BaseClassSpecifications.classMethods
  *
  * @author adrien.domurado@gmail.com
  */
-public class FeignInterfaceSpecification extends AbstractSpecification<Class<?>> {
+class FeignInterfaceSpecification extends AbstractSpecification<Class<?>> {
     @Override
     public boolean isSatisfiedBy(Class<?> candidate) {
         return BaseClassSpecifications.classIsInterface().and(classMethodsAnnotatedWith(RequestLine.class)).isSatisfiedBy(candidate);
