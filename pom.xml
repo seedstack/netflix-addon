@@ -59,6 +59,7 @@
                             <licenseMerge>Apache 2|Apache License Version 2.0</licenseMerge>
                             <licenseMerge>BSD|The New BSD License</licenseMerge>
                             <licenseMerge>CDDL|CDDL + GPLv2 with classpath exception</licenseMerge>
+                            <licenseMerge>CDDL|Common Development and Distribution License</licenseMerge>
                             <licenseMerge>EPL|Eclipse Public License - v 1.0</licenseMerge>
                             <licenseMerge>LGPL 3.0|GNU Lesser Public License</licenseMerge>
                             <licenseMerge>Public Domain|Public Domain, per Creative Commons CC0</licenseMerge>

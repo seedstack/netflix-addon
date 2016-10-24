@@ -23,7 +23,7 @@ import java.util.Map;
 public class FeignConfig {
     private Map<Class<?>, EndpointConfig> endpoints = new HashMap<>();
 
-    Map<Class<?>, EndpointConfig> getEndpoints() {
+    public Map<Class<?>, EndpointConfig> getEndpoints() {
         return Collections.unmodifiableMap(endpoints);
     }
 
