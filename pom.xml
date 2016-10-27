@@ -75,6 +75,7 @@
     <modules>
         <module>hystrix</module>
         <module>feign</module>
+        <module>eureka</module>
     </modules>
 
     <scm>
