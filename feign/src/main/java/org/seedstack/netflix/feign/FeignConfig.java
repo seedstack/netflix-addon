@@ -5,11 +5,14 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-package org.seedstack.netflix.feign.internal;
+package org.seedstack.netflix.feign;
 
 import feign.Logger;
 import feign.codec.Decoder;
 import feign.codec.Encoder;
+import feign.jackson.JacksonDecoder;
+import feign.jackson.JacksonEncoder;
+import feign.slf4j.Slf4jLogger;
 import org.seedstack.coffig.Config;
 import org.seedstack.coffig.SingleValue;
 
@@ -36,22 +39,17 @@ public class FeignConfig {
         @NotNull
         private URL baseUrl;
 
-        private Class<Encoder> encoder;
+        private Class<? extends Encoder> encoder = JacksonEncoder.class;
 
-        private Class<Decoder> decoder;
+        private Class<? extends Decoder> decoder = JacksonDecoder.class;
 
-        private Class<Logger> logger;
+        private Class<? extends Logger> logger = Slf4jLogger.class;
 
-        /**
-         * NONE, BASIC, HEADERS, FULL
-         *
-         * @see Logger.Level
-         */
-        private String logLevel;
+        private Logger.Level logLevel = Logger.Level.NONE;
 
-        private Boolean wrappedWithHystrix;
+        private HystrixWrapperMode hystrixWrapper = HystrixWrapperMode.AUTO;
 
-        private Class<FeignApi> fallback;
+        private Class<?> fallback;
 
         public URL getBaseUrl() {
             return baseUrl;
@@ -62,58 +60,64 @@ public class FeignConfig {
             return this;
         }
 
-        public Class<Encoder> getEncoder() {
+        public Class<? extends Encoder> getEncoder() {
             return encoder;
         }
 
-        public EndpointConfig setEncoder(Class<Encoder> encoder) {
+        public EndpointConfig setEncoder(Class<? extends Encoder> encoder) {
             this.encoder = encoder;
             return this;
         }
 
-        public Class<Decoder> getDecoder() {
+        public Class<? extends Decoder> getDecoder() {
             return decoder;
         }
 
-        public EndpointConfig setDecoder(Class<Decoder> decoder) {
+        public EndpointConfig setDecoder(Class<? extends Decoder> decoder) {
             this.decoder = decoder;
             return this;
         }
 
-        public Class<Logger> getLogger() {
+        public Class<? extends Logger> getLogger() {
             return logger;
         }
 
-        public EndpointConfig setLogger(Class<Logger> logger) {
+        public EndpointConfig setLogger(Class<? extends Logger> logger) {
             this.logger = logger;
             return this;
         }
 
-        public String getLogLevel() {
+        public Logger.Level getLogLevel() {
             return logLevel;
         }
 
-        public EndpointConfig setLogLevel(String logLevel) {
+        public EndpointConfig setLogLevel(Logger.Level logLevel) {
             this.logLevel = logLevel;
             return this;
         }
 
-        public Boolean isWrappedWithHystrix() {
-            return wrappedWithHystrix;
+        public HystrixWrapperMode getHystrixWrapper() {
+            return hystrixWrapper;
         }
 
-        public EndpointConfig setWrappedWithHystrix(Boolean wrappedWithHystrix) {
-            this.wrappedWithHystrix = wrappedWithHystrix;
+        public EndpointConfig setHystrixWrapper(HystrixWrapperMode hystrixWrapper) {
+            this.hystrixWrapper = hystrixWrapper;
             return this;
         }
 
-        public Class<FeignApi> getFallback() {
+        public Class<?> getFallback() {
             return fallback;
         }
 
-        public EndpointConfig setFallback(Class<FeignApi> fallback) {
+        public EndpointConfig setFallback(Class<?> fallback) {
             this.fallback = fallback;
             return this;
         }
+    }
+
+    public enum HystrixWrapperMode {
+        AUTO,
+        ENABLED,
+        DISABLED,
     }
 }

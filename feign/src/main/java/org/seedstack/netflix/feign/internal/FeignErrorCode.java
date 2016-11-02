@@ -9,6 +9,11 @@ package org.seedstack.netflix.feign.internal;
 
 import org.seedstack.seed.ErrorCode;
 
-public enum FeignErrorCode implements ErrorCode {
-    INSTANTIATION_ENCODER_ERROR, INSTANTIATION_DECODER_ERROR, INSTANTIATION_FALLBACK_ERROR, INSTANTIATION_LOGGER_ERROR
+enum FeignErrorCode implements ErrorCode {
+    ERROR_BUILDING_HYSTRIX_CLIENT,
+    ERROR_INSTANTIATING_DECODER,
+    ERROR_INSTANTIATING_ENCODER,
+    ERROR_INSTANTIATING_FALLBACK,
+    ERROR_INSTANTIATING_LOGGER,
+    HYSTRIX_NOT_PRESENT
 }

@@ -28,6 +28,7 @@
         <compatibility.skip>true</compatibility.skip>
 
         <bintray.package>netflix-addon</bintray.package>
+        <hystrix.version>1.5.5</hystrix.version>
     </properties>
 
     <build>

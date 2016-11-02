@@ -16,12 +16,10 @@ import org.seedstack.seed.core.internal.AbstractSeedPlugin;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class FeignPlugin extends AbstractSeedPlugin {
     private static final Specification<Class<?>> feignInterfaceSpecification = new FeignInterfaceSpecification();
-
-    private Collection<Class<FeignApi>> feignApis = new ArrayList<>();
+    private Collection<Class<?>> feignApis = new ArrayList<>();
 
     @Override
     public String name() {
@@ -38,9 +36,7 @@ public class FeignPlugin extends AbstractSeedPlugin {
     @Override
     protected InitState initialize(InitContext initContext) {
         Map<Specification, Collection<Class<?>>> scannedClasses = initContext.scannedTypesBySpecification();
-
-        configureFeignApi(scannedClasses.get(feignInterfaceSpecification));
-
+        feignApis.addAll(scannedClasses.get(feignInterfaceSpecification));
         return InitState.INITIALIZED;
     }
 
@@ -49,10 +45,4 @@ public class FeignPlugin extends AbstractSeedPlugin {
         return new FeignModule(feignApis);
     }
 
-    @SuppressWarnings("unchecked")
-    private void configureFeignApi(Collection<Class<?>> apiClasses) {
-        if (apiClasses != null) {
-            this.feignApis.addAll(apiClasses.stream().filter(FeignApi.class::isAssignableFrom).map(apiCandidateClass -> (Class<FeignApi>) apiCandidateClass).collect(Collectors.toList()));
-        }
-    }
 }
