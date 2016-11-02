@@ -9,10 +9,9 @@ package org.seedstack.netflix.feign.fixtures;
 
 import feign.Headers;
 import feign.RequestLine;
-import org.seedstack.netflix.feign.internal.FeignApi;
 
 @Headers("Accept: application/json")
-public interface TestAPI extends FeignApi {
+public interface TestAPI {
 
     @RequestLine("GET /message")
     Message getMessage();

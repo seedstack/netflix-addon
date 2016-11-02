@@ -12,19 +12,16 @@ import org.seedstack.seed.core.internal.AbstractSeedModule;
 import java.util.Collection;
 
 class FeignModule extends AbstractSeedModule {
-    private final Collection<Class<FeignApi>> feignApis;
+    private final Collection<Class<?>> feignApis;
 
-    FeignModule(Collection<Class<FeignApi>> feignApis) {
+    FeignModule(Collection<Class<?>> feignApis) {
         this.feignApis = feignApis;
     }
 
     @Override
     protected void configure() {
-
-        for (Class<FeignApi> feignApi : feignApis) {
-            bind(feignApi).toProvider(new FeignProvider(feignApi));
+        for (Class<?> feignApi : feignApis) {
+            bind(feignApi).toProvider((javax.inject.Provider) new FeignProvider(feignApi));
         }
     }
-
-
 }

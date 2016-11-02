@@ -9,10 +9,6 @@
 feign:
   endpoints:
     org.seedstack.netflix.feign.fixtures.TestAPI:
-      baseUrl: http://localhost:9090/test
-#      encoder: feign.jackson.JacksonEncoder
-#      decoder: feign.gson.GsonDecoder
-      wrappedWithHystrix: true
-#      logger: feign.slf4j.Slf4jLogger
+      baseUrl: http://localhost:${sys.tomcat.http.port:9090}
       logLevel: BASIC
       fallback: org.seedstack.netflix.feign.fixtures.TestFallback
