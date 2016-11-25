@@ -7,20 +7,21 @@
  */
 package org.seedstack.netflix.hystrix.fixtures;
 
-import com.netflix.hystrix.HystrixCommand;
-import com.netflix.hystrix.HystrixCommandGroupKey;
+import org.seedstack.netflix.hystrix.internal.HystrixCommand;
+import org.seedstack.seed.it.ITBind;
 
-public class CommandHelloWorld extends HystrixCommand<String> {
+public class CommandHelloWorld {
 
-    private final String name;
-
-    public CommandHelloWorld(String name) {
-        super(HystrixCommandGroupKey.Factory.asKey("TestGroup"));
-        this.name = name;
+    @HystrixCommand(fallbackMethod = "helloWorldFallback")
+    public String helloWorld(String name) {
+        if (!name.equals("error")) {
+            return "Hello " + name + " !";
+        } else {
+            throw new RuntimeException("Failed !");
+        }
     }
 
-    @Override
-    protected String run() throws Exception {
-        return "Hello " + name + " !";
+    public String helloWorldFallback(String name) {
+        return "Fallback : Hello " + name + " !";
     }
 }

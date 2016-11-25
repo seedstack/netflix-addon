@@ -7,8 +7,8 @@
  */
 package org.seedstack.netflix.hystrix;
 
+import com.google.inject.Inject;
 import org.junit.Test;
-import org.seedstack.netflix.hystrix.fixtures.CommandHelloFailure;
 import org.seedstack.netflix.hystrix.fixtures.CommandHelloWorld;
 import org.seedstack.seed.it.AbstractSeedIT;
 
@@ -16,14 +16,21 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class HystrixIT extends AbstractSeedIT {
 
+    @Inject
+    CommandHelloWorld command;
+
     @Test
-    public void test_command() {
-        assertThat(new CommandHelloWorld("World").execute()).isEqualTo("Hello World !");
+    public void commandIsInjected() {
+        assertThat(command).isNotNull();
     }
 
     @Test
-    public void test_fallback() throws Exception {
-        assertThat(new CommandHelloFailure("World").execute()).isEqualTo("Hello failure World !");
-        assertThat(new CommandHelloFailure("Bob").execute()).isEqualTo("Hello failure Bob !");
+    public void commandExecutesCorrectly() {
+        assertThat(command.helloWorld("test")).isEqualTo("Hello test !");
+    }
+
+    @Test
+    public void commandExecutesFallback() throws Exception {
+        assertThat(command.helloWorld("error")).isEqualTo("Fallback : Hello error !");
     }
 }

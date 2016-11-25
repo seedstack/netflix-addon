@@ -1,0 +1,39 @@
+/**
+ * Copyright (c) 2013-2016, The SeedStack authors <http://seedstack.org>
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+package org.seedstack.netflix.hystrix.internal;
+
+import java.lang.annotation.*;
+
+/**
+ * This annotation is used to specify some methods which should be processed as hystrix commands.
+ */
+@Target({ElementType.METHOD})
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+public @interface HystrixCommand {
+
+    /**
+     * Specifies a method to process fallback logic.
+     * A fallback method should be defined in the same class where is HystrixCommand.
+     * Also a fallback method should have the same signature to a method which was invoked as hystrix command.
+     * For example:
+     * <p>
+     * <code>
+     * {@literal @}HystrixCommand(fallbackMethod = "getByIdFallback")<br>
+     * public String getById(String id) {...}<br>
+     * <br>
+     * private String getByIdFallback(String id) {...}
+     * </code>
+     * </p>
+     * Also a fallback method can be annotated with {@link HystrixCommand}
+     *
+     * @return method name
+     */
+    String fallbackMethod() default "";
+
+}
