@@ -10,6 +10,7 @@ package org.seedstack.netflix.hystrix.internal.guice;
 import com.netflix.hystrix.HystrixExecutable;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
+import org.seedstack.netflix.hystrix.internal.annotation.HystrixCommand;
 import org.seedstack.netflix.hystrix.internal.command.CommandParameters;
 import org.seedstack.netflix.hystrix.internal.command.HystrixCommandFactory;
 import org.seedstack.netflix.hystrix.internal.utils.MethodUtils;
@@ -21,8 +22,10 @@ public class CommandInterceptor implements MethodInterceptor {
     @Override
     public Object invoke(MethodInvocation invocation) throws Throwable {
         Method command = invocation.getMethod();
+        HystrixCommand hystrixCommand = command.getDeclaredAnnotation(HystrixCommand.class);
         Class<?> declaringClassOfCommand = command.getDeclaringClass();
         CommandParameters commandParameters = new CommandParameters(
+                hystrixCommand,
                 command,
                 MethodUtils.getFallbackMethod(declaringClassOfCommand, command),
                 invocation.getArguments(),

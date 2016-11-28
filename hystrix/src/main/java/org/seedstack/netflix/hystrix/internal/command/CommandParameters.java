@@ -8,22 +8,29 @@
 package org.seedstack.netflix.hystrix.internal.command;
 
 import org.aopalliance.intercept.MethodInvocation;
+import org.seedstack.netflix.hystrix.internal.annotation.HystrixCommand;
 
 import java.lang.reflect.Method;
 
 public class CommandParameters {
+    private final HystrixCommand hystrixCommand;
     private final Method method;
     private final Method fallbackMethod;
     private final Object[] args;
     private final MethodInvocation invocation;
     private final Object proxy;
 
-    public CommandParameters(Method method, Method fallbackMethod, Object[] args, MethodInvocation invocation, Object proxy) {
+    public CommandParameters(HystrixCommand hystrixCommand, Method method, Method fallbackMethod, Object[] args, MethodInvocation invocation, Object proxy) {
+        this.hystrixCommand = hystrixCommand;
         this.method = method;
         this.fallbackMethod = fallbackMethod;
         this.args = args;
         this.invocation = invocation;
         this.proxy = proxy;
+    }
+
+    public HystrixCommand getHystrixCommand() {
+        return hystrixCommand;
     }
 
     public Method getMethod() {

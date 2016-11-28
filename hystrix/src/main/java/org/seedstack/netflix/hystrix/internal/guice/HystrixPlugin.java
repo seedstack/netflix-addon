@@ -22,8 +22,8 @@ import java.util.Collection;
 import java.util.Map;
 
 public class HystrixPlugin extends AbstractSeedPlugin {
-    private Collection<Class<?>> scannedClasses = new ArrayList<>();
     static final Matcher<Method> HYSTRIX_COMMAND_MATCHER = SeedMatchers.methodOrAncestorMetaAnnotatedWith(HystrixCommand.class).and(SeedMatchers.methodNotSynthetic()).and(SeedMatchers.methodNotOfObject());
+    private Collection<Class<?>> scannedClasses = new ArrayList<>();
     private Specification<Class<?>> hystrixCommandSpecification = classMethodsAnnotatedWith(HystrixCommand.class);
 
     @Override

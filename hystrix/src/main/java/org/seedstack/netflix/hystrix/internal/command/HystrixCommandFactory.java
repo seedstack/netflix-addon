@@ -7,15 +7,23 @@
  */
 package org.seedstack.netflix.hystrix.internal.command;
 
+import com.google.common.base.Strings;
 import com.netflix.hystrix.HystrixCommand;
 import com.netflix.hystrix.HystrixCommandGroupKey;
+import com.netflix.hystrix.HystrixCommandKey;
 import com.netflix.hystrix.HystrixExecutable;
 
 public class HystrixCommandFactory {
 
     public static HystrixExecutable create(CommandParameters commandParameters) {
-        // TODO : change groupKey to what is in the annotation is it exists
-        HystrixCommand.Setter setter = HystrixCommand.Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey(commandParameters.getMethod().getName()));
+        String groupKey = (Strings.isNullOrEmpty(commandParameters.getHystrixCommand().groupKey()))
+                ? commandParameters.getMethod().getName()
+                : commandParameters.getHystrixCommand().groupKey();
+        String commandKey = (Strings.isNullOrEmpty(commandParameters.getHystrixCommand().commandKey()))
+                ? commandParameters.getMethod().getName()
+                : commandParameters.getHystrixCommand().commandKey();
+
+        HystrixCommand.Setter setter = HystrixCommand.Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey(groupKey)).andCommandKey(HystrixCommandKey.Factory.asKey(commandKey));
         GenericCommand genericCommand = new GenericCommand(setter);
         genericCommand.setParameters(commandParameters);
         return genericCommand;
