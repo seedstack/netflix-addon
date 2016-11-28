@@ -31,6 +31,12 @@ public class HystrixIT extends AbstractSeedIT {
 
     @Test
     public void commandExecutesFallback() throws Exception {
-        assertThat(command.helloWorld("error")).isEqualTo("Fallback : Hello error !");
+        assertThat(command.failure("foo")).isEqualTo("Fallback : Hello foo !");
+    }
+
+    @Test
+    public void nestedFallbacksAreSuccessful() throws Exception {
+        assertThat(command.nestedCommand("bar")).isEqualTo("nestedFallback2: Hello bar !");
+
     }
 }

@@ -5,13 +5,14 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-package org.seedstack.netflix.hystrix.internal;
+package org.seedstack.netflix.hystrix.internal.guice;
 
 import com.google.inject.matcher.Matcher;
 import io.nuun.kernel.api.plugin.InitState;
 import io.nuun.kernel.api.plugin.context.InitContext;
 import io.nuun.kernel.api.plugin.request.ClasspathScanRequest;
 import org.kametic.specifications.Specification;
+import org.seedstack.netflix.hystrix.internal.annotation.HystrixCommand;
 import org.seedstack.seed.core.internal.AbstractSeedPlugin;
 import org.seedstack.seed.core.utils.SeedMatchers;
 

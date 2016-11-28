@@ -5,11 +5,13 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-package org.seedstack.netflix.hystrix.internal;
+package org.seedstack.netflix.hystrix.internal.command;
+
+import java.lang.reflect.InvocationTargetException;
 
 public class GenericCommand extends com.netflix.hystrix.HystrixCommand<Object> {
 
-    protected CommandParameters parameters;
+    private CommandParameters parameters;
 
     protected GenericCommand(Setter setter) {
         super(setter);
@@ -28,7 +30,16 @@ public class GenericCommand extends com.netflix.hystrix.HystrixCommand<Object> {
         try {
             return parameters.getInvocation().proceed();
         } catch (Throwable throwable) {
-            throwable.printStackTrace();
+            throw new Exception(throwable.getCause());
+        }
+    }
+
+    @Override
+    protected Object getFallback() {
+        try {
+            return parameters.getFallbackMethod().invoke(parameters.getProxy(), parameters.getArgs());
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
         }
         return null;
     }

@@ -5,9 +5,10 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-package org.seedstack.netflix.hystrix.internal;
+package org.seedstack.netflix.hystrix.internal.utils;
 
 import org.apache.commons.lang.StringUtils;
+import org.seedstack.netflix.hystrix.internal.annotation.HystrixCommand;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -32,7 +33,7 @@ public class MethodUtils {
 
     private static Optional<Method> getMethod(Class<?> type, String name, Class<?>... parameterTypes) {
         try {
-            return Optional.of(type.getMethod(name, parameterTypes));
+            return Optional.of(type.getDeclaredMethod(name, parameterTypes));
         } catch (NoSuchMethodException e) {
             return Optional.empty();
         }

@@ -7,21 +7,35 @@
  */
 package org.seedstack.netflix.hystrix.fixtures;
 
-import org.seedstack.netflix.hystrix.internal.HystrixCommand;
-import org.seedstack.seed.it.ITBind;
+import org.seedstack.netflix.hystrix.internal.annotation.HystrixCommand;
 
 public class CommandHelloWorld {
 
-    @HystrixCommand(fallbackMethod = "helloWorldFallback")
+    @HystrixCommand
     public String helloWorld(String name) {
-        if (!name.equals("error")) {
-            return "Hello " + name + " !";
-        } else {
-            throw new RuntimeException("Failed !");
-        }
+        return "Hello " + name + " !";
     }
 
-    public String helloWorldFallback(String name) {
+    @HystrixCommand(fallbackMethod = "fallback")
+    public String failure(String name) {
+        throw new RuntimeException("This method always fails !");
+    }
+
+    public String fallback(String name) {
         return "Fallback : Hello " + name + " !";
+    }
+
+    @HystrixCommand(fallbackMethod = "nestedFallback1")
+    public String nestedCommand(String name) {
+        throw new RuntimeException("Fail !");
+    }
+
+    @HystrixCommand(fallbackMethod = "nestedFallback2")
+    public String nestedFallback1(String name) {
+        throw new RuntimeException("Fallback fail !");
+    }
+
+    public String nestedFallback2(String name) {
+        return "nestedFallback2: Hello " + name + " !";
     }
 }
