@@ -38,4 +38,18 @@ public class CommandHelloWorld {
     public String nestedFallback2(String name) {
         return "nestedFallback2: Hello " + name + " !";
     }
+
+    @HystrixCommand(fallbackMethod = "inexistantFallback")
+    public String fallbackError(String name) {
+        throw new RuntimeException("Fail, and fallback doesn't exist !");
+    }
+
+    @HystrixCommand(fallbackMethod = "fallbackInException")
+    public String commandWithFallbackInException(String name) {
+        throw new RuntimeException("Fail, and fallback will fail !");
+    }
+
+    public String fallbackInException(String name) {
+        throw new RuntimeException("Error in fallback");
+    }
 }

@@ -8,11 +8,13 @@
 package org.seedstack.netflix.hystrix;
 
 import com.google.inject.Inject;
+import com.netflix.hystrix.exception.HystrixRuntimeException;
 import org.junit.Test;
 import org.seedstack.netflix.hystrix.fixtures.CommandHelloWorld;
 import org.seedstack.seed.it.AbstractSeedIT;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 public class HystrixIT extends AbstractSeedIT {
 
@@ -38,5 +40,19 @@ public class HystrixIT extends AbstractSeedIT {
     public void nestedFallbacksAreSuccessful() throws Exception {
         assertThat(command.nestedCommand("bar")).isEqualTo("nestedFallback2: Hello bar !");
 
+    }
+
+    @Test
+    public void fallbackNotFound() throws Exception {
+        assertThatExceptionOfType(RuntimeException.class)
+                .isThrownBy(() -> command.fallbackError(""))
+                .withMessage("Fallback method not found: inexistantFallback([class java.lang.String])");
+    }
+
+    @Test
+    public void fallbackThrowsAnException() throws Exception {
+        assertThatExceptionOfType(HystrixRuntimeException.class)
+                .isThrownBy(() -> command.commandWithFallbackInException(""))
+                .withMessage("commandWithFallbackInException failed and fallback failed.");
     }
 }

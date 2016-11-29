@@ -9,6 +9,7 @@ package org.seedstack.netflix.hystrix.internal.command;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 
 class GenericCommand extends com.netflix.hystrix.HystrixCommand<Object> {
 
@@ -28,19 +29,20 @@ class GenericCommand extends com.netflix.hystrix.HystrixCommand<Object> {
             return parameters.getInvocation().proceed();
         } catch (Throwable throwable) {
             // propagate the Throwable for Hystrix to catch and execute the fallback
-            throw new Exception(throwable.getCause());
+            throw new Exception(throwable);
         }
     }
 
     @Override
     protected Object getFallback() {
+        Method fallbackMethod = parameters.getFallbackMethod();
+        fallbackMethod.setAccessible(true);
         try {
-            Method fallbackMethod = parameters.getFallbackMethod();
-            fallbackMethod.setAccessible(true);
             return fallbackMethod.invoke(parameters.getProxy(), parameters.getArgs());
-        } catch (IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException("Fallback method not accessible: " + fallbackMethod.getName() + "(" + Arrays.toString(fallbackMethod.getParameterTypes()) + ")", e);
+        } catch (InvocationTargetException e) {
+            throw new RuntimeException("Fallback method in error: " + fallbackMethod.getName() + "(" + Arrays.toString(fallbackMethod.getParameterTypes()) + ")", e);
         }
-        return null;
     }
 }
