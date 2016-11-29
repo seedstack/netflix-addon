@@ -13,11 +13,11 @@ import java.util.Collection;
 
 import static com.google.inject.matcher.Matchers.any;
 
-public class HystrixModule extends AbstractSeedModule {
+class HystrixModule extends AbstractSeedModule {
 
     private final Collection<Class<?>> scannedClasses;
 
-    public HystrixModule(Collection<Class<?>> scannedClasses) {
+    HystrixModule(Collection<Class<?>> scannedClasses) {
         this.scannedClasses = scannedClasses;
     }
 

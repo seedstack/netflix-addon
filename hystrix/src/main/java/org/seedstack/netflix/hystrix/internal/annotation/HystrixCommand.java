@@ -40,7 +40,7 @@ public @interface HystrixCommand {
      * The command group key is used for grouping together commands such as for reporting,
      * alerting, dashboards or team/library ownership.
      * <p/>
-     * default => the runtime class name of annotated method (<code>Method#getName();</code>).
+     * default => the runtime name of annotated method (<code>Method#getName();</code>).
      *
      * @return group key
      * @see com.netflix.hystrix.HystrixCommandGroupKey
@@ -50,13 +50,11 @@ public @interface HystrixCommand {
     /**
      * The Hystrix command key is used to identify a command instance for statistics, circuit-breaker, properties, etc.
      * <p/>
-     * default => the runtime class name of annotated method (<code>Method#getName();</code>).
+     * default => the runtime name of annotated method (<code>Method#getName();</code>).
      *
      * @return command key
      * @see com.netflix.hystrix.HystrixCommandKey
      */
     String commandKey() default "";
-
-
 
 }

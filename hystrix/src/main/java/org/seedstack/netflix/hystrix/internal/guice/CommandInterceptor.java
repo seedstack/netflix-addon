@@ -17,7 +17,7 @@ import org.seedstack.netflix.hystrix.internal.utils.MethodUtils;
 
 import java.lang.reflect.Method;
 
-public class CommandInterceptor implements MethodInterceptor {
+class CommandInterceptor implements MethodInterceptor {
 
     @Override
     public Object invoke(MethodInvocation invocation) throws Throwable {

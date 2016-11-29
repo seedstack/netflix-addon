@@ -11,7 +11,7 @@ import org.seedstack.netflix.hystrix.internal.annotation.HystrixCommand;
 
 public class CommandHelloWorld {
 
-    @HystrixCommand
+    @HystrixCommand(commandKey = "testCommand", groupKey = "testGroup")
     public String helloWorld(String name) {
         return "Hello " + name + " !";
     }
@@ -21,7 +21,7 @@ public class CommandHelloWorld {
         throw new RuntimeException("This method always fails !");
     }
 
-    public String fallback(String name) {
+    private String fallback(String name) {
         return "Fallback : Hello " + name + " !";
     }
 

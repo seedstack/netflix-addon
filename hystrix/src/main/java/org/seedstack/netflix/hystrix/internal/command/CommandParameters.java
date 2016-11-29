@@ -29,27 +29,27 @@ public class CommandParameters {
         this.proxy = proxy;
     }
 
-    public HystrixCommand getHystrixCommand() {
+    HystrixCommand getHystrixCommand() {
         return hystrixCommand;
     }
 
-    public Method getMethod() {
+    Method getMethod() {
         return method;
     }
 
-    public Method getFallbackMethod() {
+    Method getFallbackMethod() {
         return fallbackMethod;
     }
 
-    public Object[] getArgs() {
+    Object[] getArgs() {
         return args;
     }
 
-    public MethodInvocation getInvocation() {
+    MethodInvocation getInvocation() {
         return invocation;
     }
 
-    public Object getProxy() {
+    Object getProxy() {
         return proxy;
     }
 }

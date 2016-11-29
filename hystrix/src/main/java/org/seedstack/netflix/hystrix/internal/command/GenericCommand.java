@@ -8,20 +8,17 @@
 package org.seedstack.netflix.hystrix.internal.command;
 
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
-public class GenericCommand extends com.netflix.hystrix.HystrixCommand<Object> {
+class GenericCommand extends com.netflix.hystrix.HystrixCommand<Object> {
 
     private CommandParameters parameters;
 
-    protected GenericCommand(Setter setter) {
+    GenericCommand(Setter setter) {
         super(setter);
     }
 
-    public CommandParameters getParameters() {
-        return parameters;
-    }
-
-    public void setParameters(CommandParameters parameters) {
+    void setParameters(CommandParameters parameters) {
         this.parameters = parameters;
     }
 
@@ -30,6 +27,7 @@ public class GenericCommand extends com.netflix.hystrix.HystrixCommand<Object> {
         try {
             return parameters.getInvocation().proceed();
         } catch (Throwable throwable) {
+            // propagate the Throwable for Hystrix to catch and execute the fallback
             throw new Exception(throwable.getCause());
         }
     }
@@ -37,7 +35,9 @@ public class GenericCommand extends com.netflix.hystrix.HystrixCommand<Object> {
     @Override
     protected Object getFallback() {
         try {
-            return parameters.getFallbackMethod().invoke(parameters.getProxy(), parameters.getArgs());
+            Method fallbackMethod = parameters.getFallbackMethod();
+            fallbackMethod.setAccessible(true);
+            return fallbackMethod.invoke(parameters.getProxy(), parameters.getArgs());
         } catch (IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
