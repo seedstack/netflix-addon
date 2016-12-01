@@ -14,8 +14,10 @@ import org.seedstack.netflix.hystrix.internal.annotation.HystrixCommand;
 import org.seedstack.netflix.hystrix.internal.command.CommandParameters;
 import org.seedstack.netflix.hystrix.internal.command.HystrixCommandFactory;
 import org.seedstack.netflix.hystrix.internal.utils.MethodUtils;
+import rx.Observable;
 
 import java.lang.reflect.Method;
+import java.util.concurrent.Future;
 
 class CommandInterceptor implements MethodInterceptor {
 
@@ -32,6 +34,13 @@ class CommandInterceptor implements MethodInterceptor {
                 invocation,
                 invocation.getThis());
         HystrixExecutable executable = HystrixCommandFactory.create(commandParameters);
-        return executable.execute();
+        Class<?> returnType = command.getReturnType();
+        if (Future.class.isAssignableFrom(returnType)) {
+            return executable.queue();
+        } else if (Observable.class.isAssignableFrom(returnType)) {
+            return executable.observe();
+        } else {
+            return executable.execute();
+        }
     }
 }

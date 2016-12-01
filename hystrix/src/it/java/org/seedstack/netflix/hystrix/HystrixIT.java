@@ -39,7 +39,6 @@ public class HystrixIT extends AbstractSeedIT {
     @Test
     public void nestedFallbacksAreSuccessful() throws Exception {
         assertThat(command.nestedCommand("bar")).isEqualTo("nestedFallback2: Hello bar !");
-
     }
 
     @Test
