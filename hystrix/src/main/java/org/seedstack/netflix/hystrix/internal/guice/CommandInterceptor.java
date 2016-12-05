@@ -21,6 +21,13 @@ import java.util.concurrent.Future;
 
 class CommandInterceptor implements MethodInterceptor {
 
+    /**
+     * Wraps the intercepted method into a hystrix command and executes it
+     *
+     * @param invocation the method invocation joinpoint
+     * @return the result of the intercepted method
+     * @throws Throwable if the interceptors or the target-object throws an exception
+     */
     @Override
     public Object invoke(MethodInvocation invocation) throws Throwable {
         Method command = invocation.getMethod();

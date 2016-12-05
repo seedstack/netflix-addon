@@ -16,6 +16,15 @@ import java.util.Optional;
 
 public class MethodUtils {
 
+    /**
+     * Reads the annotation on the command method to retrieve the fallback method, if it exists.
+     * <p>
+     * The fallback method must have the same signature as the command method.
+     *
+     * @param type          the object declaring the method
+     * @param commandMethod the method
+     * @return the fallback method
+     */
     public static Method getFallbackMethod(Class<?> type, Method commandMethod) {
         if (commandMethod.isAnnotationPresent(HystrixCommand.class)) {
             HystrixCommand hystrixCommandAnnotation = commandMethod.getAnnotation(HystrixCommand.class);

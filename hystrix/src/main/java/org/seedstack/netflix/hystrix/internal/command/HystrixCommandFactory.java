@@ -13,6 +13,9 @@ import com.netflix.hystrix.HystrixCommandGroupKey;
 import com.netflix.hystrix.HystrixCommandKey;
 import com.netflix.hystrix.HystrixExecutable;
 
+/**
+ * Factory to create a hsytrix command from the intercepted method and its annotation
+ */
 public class HystrixCommandFactory {
 
     public static HystrixExecutable create(CommandParameters commandParameters) {
