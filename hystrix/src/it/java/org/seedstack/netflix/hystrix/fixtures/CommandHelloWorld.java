@@ -8,6 +8,10 @@
 package org.seedstack.netflix.hystrix.fixtures;
 
 import org.seedstack.netflix.hystrix.internal.annotation.HystrixCommand;
+import rx.Observable;
+import rx.Subscriber;
+
+import java.util.concurrent.*;
 
 public class CommandHelloWorld {
 
@@ -51,5 +55,25 @@ public class CommandHelloWorld {
 
     public String fallbackInException(String name) {
         throw new RuntimeException("Error in fallback");
+    }
+
+    @HystrixCommand
+    public Future<String> asyncCommand(String name) {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        return executor.submit(() -> "Async: Hello " + name + " !");
+    }
+
+    @HystrixCommand
+    public Observable<String> observableCommand(String name) {
+        return Observable.create(subscriber -> {
+            try {
+                if (!subscriber.isUnsubscribed()) {
+                    subscriber.onNext("Observer: Hello " + name + " !");
+                    subscriber.onCompleted();
+                }
+            } catch (Exception e) {
+                subscriber.onError(e);
+            }
+        });
     }
 }

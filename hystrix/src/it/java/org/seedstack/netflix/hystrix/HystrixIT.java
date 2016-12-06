@@ -12,6 +12,9 @@ import com.netflix.hystrix.exception.HystrixRuntimeException;
 import org.junit.Test;
 import org.seedstack.netflix.hystrix.fixtures.CommandHelloWorld;
 import org.seedstack.seed.it.AbstractSeedIT;
+import rx.functions.Action1;
+
+import java.util.concurrent.Future;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
@@ -53,5 +56,18 @@ public class HystrixIT extends AbstractSeedIT {
         assertThatExceptionOfType(HystrixRuntimeException.class)
                 .isThrownBy(() -> command.commandWithFallbackInException(""))
                 .withMessage("commandWithFallbackInException failed and fallback failed.");
+    }
+
+    @Test
+    public void asyncCommandExecutesCorrectly() throws Exception {
+        Future<String> future = command.asyncCommand("async");
+        String s = future.get();
+        assertThat(s).isEqualTo("Async: Hello async !");
+    }
+
+    @Test
+    public void observerCommandExecutesCorrectly() throws Exception {
+        String s = command.observableCommand("test").toBlocking().single();
+        assertThat(s).isEqualTo("Observer: Hello test !");
     }
 }

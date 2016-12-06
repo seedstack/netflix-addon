@@ -7,9 +7,12 @@
  */
 package org.seedstack.netflix.hystrix.internal.command;
 
+import rx.Observable;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.concurrent.Future;
 
 class GenericCommand extends com.netflix.hystrix.HystrixCommand<Object> {
 
@@ -26,7 +29,16 @@ class GenericCommand extends com.netflix.hystrix.HystrixCommand<Object> {
     @Override
     protected Object run() throws Exception {
         try {
-            return parameters.getInvocation().proceed();
+            Object result = parameters.getInvocation().proceed();
+            Class<?> returnType = parameters.getMethod().getReturnType();
+            if (Future.class.isAssignableFrom(returnType)) {
+                return ((Future) result).get();
+            } else if (Observable.class.isAssignableFrom(returnType)) {
+                // FIXME : works only for Observable that return a single value
+                return ((Observable) result).toBlocking().toFuture().get();
+            } else {
+                return result;
+            }
         } catch (Throwable throwable) {
             // propagate the Throwable for Hystrix to catch and execute the fallback
             throw new Exception(throwable);
