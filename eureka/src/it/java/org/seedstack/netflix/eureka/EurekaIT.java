@@ -7,7 +7,21 @@
  */
 package org.seedstack.netflix.eureka;
 
+import com.google.inject.Inject;
+import com.netflix.discovery.EurekaClient;
+import org.junit.Test;
 import org.seedstack.seed.it.AbstractSeedIT;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 public class EurekaIT extends AbstractSeedIT {
+
+    @Inject
+    private EurekaClient eurekaClient;
+
+    @Test
+    public void eureka_client_is_injected() {
+        assertThat(eurekaClient).isNotNull();
+    }
+
 }
