@@ -36,6 +36,21 @@ public class MyService {
 }
 ```
 
+After that, you can use your command by injecting your service and calling the appropriate method:
+```java
+public class BusinessService {
+
+    @Inject
+    MyService service;
+    
+    public void doSomething() {
+        ...
+        service.helloWorld("world");
+        ...
+    }
+}
+```
+
 To utilize the fallback mecanism, add the name of the fallback method in the annotation:
 ```java
 public class MyService {
