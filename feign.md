@@ -76,7 +76,7 @@ feign:
             decoder: feign.jackson.JacksonDecoder
             logger: feign.slf4j.SLF4JLogger 
             logLevel: NONE
-            hystrixWrapper: ENABLED
+            hystrixWrapper: AUTO
             fallback: com.mycompany.myapp.Fallback
 ```
 The values in this example are the default values, except for `baseUrl` and `fallback` that don't have default values.
