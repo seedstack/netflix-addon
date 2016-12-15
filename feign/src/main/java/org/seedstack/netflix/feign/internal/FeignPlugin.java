@@ -18,7 +18,7 @@ import java.util.Collection;
 import java.util.Map;
 
 public class FeignPlugin extends AbstractSeedPlugin {
-    private static final Specification<Class<?>> feignInterfaceSpecification = new FeignInterfaceSpecification();
+    private final Specification<Class<?>> FEIGN_INTERFACE_SPECIFICATION = new FeignInterfaceSpecification();
     private Collection<Class<?>> feignApis = new ArrayList<>();
 
     @Override
@@ -29,14 +29,14 @@ public class FeignPlugin extends AbstractSeedPlugin {
     @Override
     public Collection<ClasspathScanRequest> classpathScanRequests() {
         return classpathScanRequestBuilder()
-                .specification(feignInterfaceSpecification)
+                .specification(FEIGN_INTERFACE_SPECIFICATION)
                 .build();
     }
 
     @Override
     protected InitState initialize(InitContext initContext) {
         Map<Specification, Collection<Class<?>>> scannedClasses = initContext.scannedTypesBySpecification();
-        feignApis.addAll(scannedClasses.get(feignInterfaceSpecification));
+        feignApis.addAll(scannedClasses.get(FEIGN_INTERFACE_SPECIFICATION));
         return InitState.INITIALIZED;
     }
 

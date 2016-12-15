@@ -7,22 +7,18 @@
  */
 package org.seedstack.netflix.hystrix.internal.guice;
 
-import com.google.inject.matcher.Matcher;
 import io.nuun.kernel.api.plugin.InitState;
 import io.nuun.kernel.api.plugin.context.InitContext;
 import io.nuun.kernel.api.plugin.request.ClasspathScanRequest;
 import org.kametic.specifications.Specification;
 import org.seedstack.netflix.hystrix.internal.annotation.HystrixCommand;
 import org.seedstack.seed.core.internal.AbstractSeedPlugin;
-import org.seedstack.seed.core.utils.SeedMatchers;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
 public class HystrixPlugin extends AbstractSeedPlugin {
-    static final Matcher<Method> HYSTRIX_COMMAND_MATCHER = SeedMatchers.methodOrAncestorMetaAnnotatedWith(HystrixCommand.class).and(SeedMatchers.methodNotSynthetic()).and(SeedMatchers.methodNotOfObject());
     private Collection<Class<?>> scannedClasses = new ArrayList<>();
     private Specification<Class<?>> hystrixCommandSpecification = classMethodsAnnotatedWith(HystrixCommand.class);
 

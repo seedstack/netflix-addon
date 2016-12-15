@@ -7,7 +7,7 @@
  */
 package org.seedstack.netflix.feign.internal;
 
-import org.seedstack.seed.ErrorCode;
+import org.seedstack.shed.exception.ErrorCode;
 
 enum FeignErrorCode implements ErrorCode {
     ERROR_BUILDING_HYSTRIX_CLIENT,

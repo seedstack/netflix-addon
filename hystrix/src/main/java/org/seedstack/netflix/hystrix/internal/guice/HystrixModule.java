@@ -7,14 +7,17 @@
  */
 package org.seedstack.netflix.hystrix.internal.guice;
 
-import org.seedstack.seed.core.internal.AbstractSeedModule;
+import com.google.inject.AbstractModule;
+import com.google.inject.matcher.Matcher;
+import org.seedstack.seed.core.internal.utils.MethodMatcherBuilder;
 
+import java.lang.reflect.Method;
 import java.util.Collection;
 
 import static com.google.inject.matcher.Matchers.any;
 
-class HystrixModule extends AbstractSeedModule {
-
+class HystrixModule extends AbstractModule {
+    private static final Matcher<Method> HYSTRIX_COMMAND_MATCHER = new MethodMatcherBuilder(HystrixCommandAnnotationResolver.INSTANCE).build();
     private final Collection<Class<?>> scannedClasses;
 
     HystrixModule(Collection<Class<?>> scannedClasses) {
@@ -24,6 +27,6 @@ class HystrixModule extends AbstractSeedModule {
     @Override
     protected void configure() {
         scannedClasses.forEach(this::bind);
-        bindInterceptor(any(), HystrixPlugin.HYSTRIX_COMMAND_MATCHER, new CommandInterceptor());
+        bindInterceptor(any(), HYSTRIX_COMMAND_MATCHER, new CommandInterceptor());
     }
 }

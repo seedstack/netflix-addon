@@ -15,14 +15,14 @@ import feign.hystrix.HystrixFeign;
 import org.seedstack.netflix.feign.FeignConfig;
 import org.seedstack.seed.Configuration;
 import org.seedstack.seed.SeedException;
-import org.seedstack.seed.core.utils.SeedReflectionUtils;
+import org.seedstack.shed.reflect.Classes;
 
 import javax.inject.Provider;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
 class FeignProvider implements Provider<Object> {
-    private static final Optional<Class<Object>> HYSTRIX_OPTIONAL = SeedReflectionUtils.optionalOfClass("com.netflix.hystrix.Hystrix");
+    private static final Optional<Class<Object>> HYSTRIX_OPTIONAL = Classes.optional("com.netflix.hystrix.Hystrix");
     @Configuration
     private FeignConfig config;
     private Class<?> feignApi;
