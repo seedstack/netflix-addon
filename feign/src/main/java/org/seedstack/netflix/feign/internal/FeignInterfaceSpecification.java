@@ -9,7 +9,7 @@ package org.seedstack.netflix.feign.internal;
 
 import feign.RequestLine;
 import org.kametic.specifications.AbstractSpecification;
-import org.seedstack.netflix.feign.FeignClient;
+import org.seedstack.netflix.feign.FeignApi;
 import org.seedstack.shed.reflect.AnnotationPredicates;
 import org.seedstack.shed.reflect.ClassPredicates;
 
@@ -23,7 +23,7 @@ class FeignInterfaceSpecification extends AbstractSpecification<Class<?>> {
     public boolean isSatisfiedBy(Class<?> candidate) {
         return ClassPredicates
                 .classIsInterface()
-                .and(AnnotationPredicates.elementAnnotatedWith(FeignClient.class, false))
+                .and(AnnotationPredicates.elementAnnotatedWith(FeignApi.class, false))
                 .and(AnnotationPredicates.atLeastOneMethodAnnotatedWith(RequestLine.class, false))
                 .test(candidate);
     }

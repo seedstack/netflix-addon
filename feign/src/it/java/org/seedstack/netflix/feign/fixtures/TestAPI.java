@@ -9,9 +9,9 @@ package org.seedstack.netflix.feign.fixtures;
 
 import feign.Headers;
 import feign.RequestLine;
-import org.seedstack.netflix.feign.FeignClient;
+import org.seedstack.netflix.feign.FeignApi;
 
-@FeignClient
+@FeignApi
 @Headers("Accept: application/json")
 public interface TestAPI {
 

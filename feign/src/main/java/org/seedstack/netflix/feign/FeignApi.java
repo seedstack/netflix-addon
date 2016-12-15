@@ -14,10 +14,11 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Marker interface for Feign clients.
+ * Interfaces annotated with this annotation and with at least one method annotated with {@link feign.RequestLine}
+ * are injectable as a Feign client.
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})
 @Documented
-public @interface FeignClient {
+public @interface FeignApi {
 }
