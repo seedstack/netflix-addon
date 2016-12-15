@@ -24,8 +24,9 @@ See the documentation on the page's project: [https://github.com/OpenFeign/feign
 
 # How to use
 
-First, you need to create an interface with each method being an HTTP call. Annotate each method with @RequestLine:
+First, you need to create an interface annotated by `@FeignApi`, with each method being an HTTP call. Annotate each method with `@RequestLine`:
 ```java
+@FeignApi
 public interface Api {
     
     @RequestLine("GET /message")
