@@ -7,7 +7,11 @@
  */
 package org.seedstack.netflix.hystrix.internal.annotation;
 
-import java.lang.annotation.*;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * This annotation is used to specify some methods which should be processed as hystrix commands.
@@ -30,7 +34,7 @@ public @interface HystrixCommand {
      * private String getByIdFallback(String id) {...}
      * </code>
      * </p>
-     * Also a fallback method can be annotated with {@link HystrixCommand}
+     * Also a fallback method can be annotated with {@link HystrixCommand}.
      *
      * @return method name
      */
@@ -38,9 +42,8 @@ public @interface HystrixCommand {
 
     /**
      * The command group key is used for grouping together commands such as for reporting,
-     * alerting, dashboards or team/library ownership.
-     * <p/>
-     * default => the runtime name of annotated method (<code>Method#getName();</code>).
+     * alerting, dashboards or team/library ownership. Defaults to the runtime name of annotated
+     * method {@link java.lang.reflect.Method#getName()}.
      *
      * @return group key
      * @see com.netflix.hystrix.HystrixCommandGroupKey
@@ -49,8 +52,7 @@ public @interface HystrixCommand {
 
     /**
      * The Hystrix command key is used to identify a command instance for statistics, circuit-breaker, properties, etc.
-     * <p/>
-     * default => the runtime name of annotated method (<code>Method#getName();</code>).
+     * Defaults to the runtime name of annotated method {@link java.lang.reflect.Method#getName()}.
      *
      * @return command key
      * @see com.netflix.hystrix.HystrixCommandKey
