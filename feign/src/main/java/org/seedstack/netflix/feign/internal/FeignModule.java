@@ -7,11 +7,11 @@
  */
 package org.seedstack.netflix.feign.internal;
 
-import org.seedstack.seed.core.internal.AbstractSeedModule;
+import com.google.inject.AbstractModule;
 
 import java.util.Collection;
 
-class FeignModule extends AbstractSeedModule {
+class FeignModule extends AbstractModule {
     private final Collection<Class<?>> feignApis;
 
     FeignModule(Collection<Class<?>> feignApis) {
@@ -19,6 +19,7 @@ class FeignModule extends AbstractSeedModule {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     protected void configure() {
         for (Class<?> feignApi : feignApis) {
             bind(feignApi).toProvider((javax.inject.Provider) new FeignProvider(feignApi));

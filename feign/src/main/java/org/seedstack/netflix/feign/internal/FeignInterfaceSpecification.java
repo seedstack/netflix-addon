@@ -9,9 +9,9 @@ package org.seedstack.netflix.feign.internal;
 
 import feign.RequestLine;
 import org.kametic.specifications.AbstractSpecification;
-import org.seedstack.seed.core.utils.BaseClassSpecifications;
-
-import static org.seedstack.seed.core.utils.BaseClassSpecifications.classMethodsAnnotatedWith;
+import org.seedstack.netflix.feign.FeignApi;
+import org.seedstack.shed.reflect.AnnotationPredicates;
+import org.seedstack.shed.reflect.ClassPredicates;
 
 /**
  * The specification matches classes that are Interfaces and have methods annotated with @{@link RequestLine}
@@ -21,6 +21,10 @@ import static org.seedstack.seed.core.utils.BaseClassSpecifications.classMethods
 class FeignInterfaceSpecification extends AbstractSpecification<Class<?>> {
     @Override
     public boolean isSatisfiedBy(Class<?> candidate) {
-        return BaseClassSpecifications.classIsInterface().and(classMethodsAnnotatedWith(RequestLine.class)).isSatisfiedBy(candidate);
+        return ClassPredicates
+                .classIsInterface()
+                .and(AnnotationPredicates.elementAnnotatedWith(FeignApi.class, false))
+                .and(AnnotationPredicates.atLeastOneMethodAnnotatedWith(RequestLine.class, false))
+                .test(candidate);
     }
 }
