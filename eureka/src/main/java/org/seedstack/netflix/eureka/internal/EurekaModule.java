@@ -7,6 +7,7 @@
  */
 package org.seedstack.netflix.eureka.internal;
 
+import com.google.inject.AbstractModule;
 import com.netflix.appinfo.ApplicationInfoManager;
 import com.netflix.appinfo.EurekaInstanceConfig;
 import com.netflix.appinfo.InstanceInfo;
@@ -15,9 +16,8 @@ import com.netflix.appinfo.providers.EurekaConfigBasedInstanceInfoProvider;
 import com.netflix.discovery.DefaultEurekaClientConfig;
 import com.netflix.discovery.DiscoveryClient;
 import com.netflix.discovery.EurekaClient;
-import org.seedstack.seed.core.internal.AbstractSeedModule;
 
-public class EurekaModule extends AbstractSeedModule {
+public class EurekaModule extends AbstractModule {
     @Override
     protected void configure() {
 
