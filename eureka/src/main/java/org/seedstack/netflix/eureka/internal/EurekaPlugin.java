@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright (c) 2013-2016, The SeedStack authors <http://seedstack.org>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -7,10 +7,10 @@
  */
 package org.seedstack.netflix.eureka.internal;
 
-import com.netflix.discovery.guice.EurekaModule;
 import org.seedstack.seed.core.internal.AbstractSeedPlugin;
 
 public class EurekaPlugin extends AbstractSeedPlugin {
+
     @Override
     public String name() {
         return "eureka";
