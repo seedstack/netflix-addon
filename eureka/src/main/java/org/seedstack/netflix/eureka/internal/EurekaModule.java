@@ -8,25 +8,12 @@
 package org.seedstack.netflix.eureka.internal;
 
 import com.google.inject.AbstractModule;
-import com.netflix.appinfo.ApplicationInfoManager;
-import com.netflix.appinfo.EurekaInstanceConfig;
-import com.netflix.appinfo.InstanceInfo;
-import com.netflix.appinfo.MyDataCenterInstanceConfig;
-import com.netflix.appinfo.providers.EurekaConfigBasedInstanceInfoProvider;
-import com.netflix.discovery.DefaultEurekaClientConfig;
-import com.netflix.discovery.DiscoveryClient;
+import com.google.inject.Scopes;
 import com.netflix.discovery.EurekaClient;
 
 public class EurekaModule extends AbstractModule {
     @Override
     protected void configure() {
-
-        EurekaInstanceConfig instanceConfig = new MyDataCenterInstanceConfig();
-        InstanceInfo instanceInfo = new EurekaConfigBasedInstanceInfoProvider(instanceConfig).get();
-        ApplicationInfoManager applicationInfoManager = new ApplicationInfoManager(instanceConfig, instanceInfo);
-
-        EurekaClient eurekaClient = new DiscoveryClient(applicationInfoManager, new DefaultEurekaClientConfig());
-
-        requestInjection(eurekaClient);
+        bind(EurekaClient.class).toProvider(EurekaClientProvider.class).in(Scopes.SINGLETON);
     }
 }
