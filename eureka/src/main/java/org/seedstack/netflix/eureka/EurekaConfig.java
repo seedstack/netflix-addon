@@ -7,13 +7,20 @@
  */
 package org.seedstack.netflix.eureka;
 
+import com.netflix.appinfo.DataCenterInfo;
 import com.netflix.appinfo.EurekaAccept;
+import com.netflix.appinfo.EurekaInstanceConfig;
 import com.netflix.discovery.EurekaClientConfig;
+import com.netflix.discovery.shared.Pair;
 import com.netflix.discovery.shared.transport.EurekaTransportConfig;
 import org.seedstack.coffig.Config;
 import org.seedstack.coffig.SingleValue;
+import org.seedstack.netflix.eureka.internal.EurekaErrorCode;
+import org.seedstack.seed.SeedException;
 
 import javax.annotation.Nullable;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,15 +28,192 @@ import java.util.Map;
 
 @Config("eureka")
 public class EurekaConfig {
-
     private ClientConfig client = new ClientConfig();
-
+    private InstanceConfig instance = new InstanceConfig();
 
     public ClientConfig client() {
         return client;
     }
 
+    public InstanceConfig instance() {
+        return instance;
+    }
 
+    @Config("instance")
+    public static class InstanceConfig implements EurekaInstanceConfig {
+        private static final Pair<String, String> hostInfo = getHostInfo();
+        private String instanceId;
+        private String appname = "unknown";
+        private String appGroupName = "unknown";
+        private boolean instanceEnabledOnit = false;
+        private int nonSecurePort = 80;
+        private int securePort = 443;
+        private boolean nonSecurePortEnabled = true;
+        private boolean securePortEnabled = false;
+        private int leaseRenewalIntervalInSeconds = 30;
+        private int leaseExpirationDurationInSeconds = 90;
+        private String virtualHostName = getHostName(false) + ":" + nonSecurePort;
+        private String secureVirtualHostName = getHostName(false) + ":" + securePort;
+        private String asgName;
+        private Map<String, String> metadata = new HashMap<>();
+        private String statusPageUrlPath = "/Status";
+        private String statusPageUrl;
+        private String homePageUrlPath = "/";
+        private String homePageUrl;
+        private String healthCheckUrlPath = "/healthcheck";
+        private String healthCheckUrl;
+        private String secureHealthCheckUrl;
+        private String[] defaultAddressResolutionOrder = new String[0];
+
+        private static Pair<String, String> getHostInfo() {
+            Pair<String, String> pair = new Pair<>("", "");
+            try {
+                pair.setFirst(InetAddress.getLocalHost().getHostAddress());
+                pair.setSecond(InetAddress.getLocalHost().getHostName());
+            } catch (UnknownHostException e) {
+                throw SeedException.wrap(e, EurekaErrorCode.UNKNOWN_HOST_EXCEPTION);
+            }
+            return pair;
+        }
+
+        @Override
+        public String getInstanceId() {
+            return instanceId == null ? null : instanceId.trim();
+        }
+
+        @Override
+        public String getAppname() {
+            return appname.trim();
+        }
+
+        @Override
+        public String getAppGroupName() {
+            return appGroupName.trim();
+        }
+
+        @Override
+        public boolean isInstanceEnabledOnit() {
+            return instanceEnabledOnit;
+        }
+
+        @Override
+        public int getNonSecurePort() {
+            return nonSecurePort;
+        }
+
+        @Override
+        public int getSecurePort() {
+            return securePort;
+        }
+
+        @Override
+        public boolean isNonSecurePortEnabled() {
+            return nonSecurePortEnabled;
+        }
+
+        @Override
+        public boolean getSecurePortEnabled() {
+            return securePortEnabled;
+        }
+
+        @Override
+        public int getLeaseRenewalIntervalInSeconds() {
+            return leaseRenewalIntervalInSeconds;
+        }
+
+        @Override
+        public int getLeaseExpirationDurationInSeconds() {
+            return leaseExpirationDurationInSeconds;
+        }
+
+        @Override
+        public String getVirtualHostName() {
+            if (this.isNonSecurePortEnabled()) {
+                return virtualHostName;
+            } else {
+                return null;
+            }
+        }
+
+        @Override
+        public String getSecureVirtualHostName() {
+            if (this.getSecurePortEnabled()) {
+                return secureVirtualHostName;
+            } else {
+                return null;
+            }
+        }
+
+        @Override
+        public String getASGName() {
+            return asgName;
+        }
+
+        @Override
+        public String getHostName(boolean refresh) {
+            return hostInfo.second();
+        }
+
+        @Override
+        public Map<String, String> getMetadataMap() {
+            return metadata;
+        }
+
+        @Override
+        public DataCenterInfo getDataCenterInfo() {
+            return () -> DataCenterInfo.Name.MyOwn;
+        }
+
+        @Override
+        public String getIpAddress() {
+            return hostInfo.first();
+        }
+
+        @Override
+        public String getStatusPageUrlPath() {
+            return statusPageUrlPath;
+        }
+
+        @Override
+        public String getStatusPageUrl() {
+            return statusPageUrl;
+        }
+
+        @Override
+        public String getHomePageUrlPath() {
+            return homePageUrlPath;
+        }
+
+        @Override
+        public String getHomePageUrl() {
+            return homePageUrl;
+        }
+
+        @Override
+        public String getHealthCheckUrlPath() {
+            return healthCheckUrlPath;
+        }
+
+        @Override
+        public String getHealthCheckUrl() {
+            return healthCheckUrl;
+        }
+
+        @Override
+        public String getSecureHealthCheckUrl() {
+            return secureHealthCheckUrl;
+        }
+
+        @Override
+        public String[] getDefaultAddressResolutionOrder() {
+            return defaultAddressResolutionOrder;
+        }
+
+        @Override
+        public String getNamespace() {
+            return "";
+        }
+    }
 
     @Config("client")
     public static class ClientConfig implements EurekaClientConfig {

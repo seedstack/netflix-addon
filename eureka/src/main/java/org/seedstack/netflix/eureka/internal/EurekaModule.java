@@ -8,12 +8,21 @@
 package org.seedstack.netflix.eureka.internal;
 
 import com.google.inject.AbstractModule;
-import com.google.inject.Scopes;
+import com.netflix.appinfo.ApplicationInfoManager;
 import com.netflix.discovery.EurekaClient;
 
-public class EurekaModule extends AbstractModule {
+class EurekaModule extends AbstractModule {
+    private final EurekaClient eurekaClient;
+    private final ApplicationInfoManager applicationInfoManager;
+
+    EurekaModule(EurekaClient eurekaClient, ApplicationInfoManager applicationInfoManager) {
+        this.eurekaClient = eurekaClient;
+        this.applicationInfoManager = applicationInfoManager;
+    }
+
     @Override
     protected void configure() {
-        bind(EurekaClient.class).toProvider(EurekaClientProvider.class).in(Scopes.SINGLETON);
+        bind(EurekaClient.class).toInstance(eurekaClient);
+        bind(ApplicationInfoManager.class).toInstance(applicationInfoManager);
     }
 }
