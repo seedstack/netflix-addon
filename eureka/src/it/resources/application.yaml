@@ -12,4 +12,8 @@ eureka:
     shouldUseDnsForFetchingServiceUrls: false
     eurekaServerServiceUrls: http://localhost:8080/eureka/v2/
     decoderName: JacksonJson
-    shouldRegisterWithEureka: false
+    region: default
+  instance:
+    appname: sampleRegisteringService
+    virtualHostName: sampleservice.mydomain.net
+    nonSecurePort: 8001
