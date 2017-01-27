@@ -53,7 +53,7 @@ public class MyClass {
 }
 ```
 
-# Properties
+# Configuration
 
 Feign is configurable by endpoint, and in its basic form is:
 
