@@ -1,12 +1,8 @@
 ---
-title: "Basics"
-name: "Netflix"
+title: "Netflix"
 repo: "https://github.com/seedstack/netflix-addon"
 author: "Adrien DOMURADO"
 description: "Provides integration of various Netflix open-source components with SeedStack."
-min-version: "16.11+"
-backend: true
-weight: -1
 tags:
     - "netflix"
     - "cloud"
@@ -19,9 +15,6 @@ menu:
         weight: 10
 ---
 
-Seed Netflix add-on contains several Netflix open-source components to allow cloud and microservices achitectures in Seed applications.
+SeedStack Netflix add-on provides integration for several Netflix open-source components useful for cloud and micro-services 
+architectures.
 
-If you want to add all the components in one go, use the following dependency:
-{{< dependency g="org.seedstack.addons.netflix" a="netflix" >}}
-
-However, you can add only the components that are relevant for your project.

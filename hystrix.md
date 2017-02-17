@@ -1,8 +1,8 @@
 ---
 title: "Hystrix"
-name: "Netflix"
+parent: "Netflix"
 repo: "https://github.com/seedstack/netflix-addon"
-min-version: "16.11+"
+weight: -1
 tags:
     - "netflix"
     - "cloud"
