@@ -15,7 +15,8 @@ menu:
         weight: 40
 ---
 
-This component is used to discover services for the purpose of load balancing and failover of middle-tier servers.
+This component is used to discover services for the purpose of load balancing and failover of middle-tier servers.<!--more-->
+
 {{< dependency g="org.seedstack.addons.netflix" a="netflix-eureka" >}}
 
 {{% callout info %}}

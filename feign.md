@@ -15,7 +15,8 @@ menu:
         weight: 20
 ---
 
-This component allows you to configure a java HTTP client very simply.
+This component allows you to configure a java HTTP client very simply.<!--more-->
+
 {{< dependency g="org.seedstack.addons.netflix" a="netflix-feign" >}}
 
 {{% callout info %}}

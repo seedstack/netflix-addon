@@ -16,5 +16,5 @@ menu:
 ---
 
 SeedStack Netflix add-on provides integration for several Netflix open-source components useful for cloud and micro-services 
-architectures.
+architectures.<!--more-->
 
