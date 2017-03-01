@@ -68,7 +68,7 @@ public class MyService {
 }
 ```
 
-{{% callout warn %}}
+{{% callout warning %}}
 It's important to remember that the Hystrix command and the fallback must be in the same class and have the same signature !
 {{% /callout %}}
 
