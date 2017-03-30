@@ -4,10 +4,8 @@ parent: "Netflix"
 repo: "https://github.com/seedstack/netflix-addon"
 weight: -1
 tags:
-    - "netflix"
-    - "cloud"
-    - "microservices"
-    - "api"
+    - api
+    - micro-service
 zones:
     - Addons
 menu:

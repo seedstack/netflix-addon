@@ -3,11 +3,6 @@ title: "Netflix"
 repo: "https://github.com/seedstack/netflix-addon"
 author: "Adrien DOMURADO"
 description: "Provides integration of various Netflix open-source components with SeedStack."
-tags:
-    - "netflix"
-    - "cloud"
-    - "microservices"
-    - "api"
 zones:
     - Addons
 menu:
