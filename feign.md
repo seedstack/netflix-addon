@@ -75,7 +75,7 @@ feign:
             baseUrl: http://base.url.to.api:port
             encoder: feign.jackson.JacksonEncoder
             decoder: feign.jackson.JacksonDecoder
-            logger: feign.slf4j.SLF4JLogger 
+            logger: feign.slf4j.Slf4jLogger 
             logLevel: NONE
             hystrixWrapper: AUTO
             fallback: com.mycompany.myapp.Fallback
