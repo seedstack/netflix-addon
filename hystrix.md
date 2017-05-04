@@ -14,7 +14,8 @@ menu:
         weight: 30
 ---
 
-This component allows you to wrap your network calls with the Hystrix library. Hystrix is a library that add latency tolerance and fault tolerance logic, as well as metrics.<!--more-->
+This component allows you to wrap your network calls with the Hystrix library. Hystrix is a library that add latency tolerance 
+and fault tolerance logic, as well as metrics.<!--more-->
 
 {{< dependency g="org.seedstack.addons.netflix" a="netflix-hystrix" >}}
 
