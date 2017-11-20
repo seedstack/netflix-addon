@@ -19,7 +19,7 @@
 
     <groupId>org.seedstack.addons.netflix</groupId>
     <artifactId>netflix</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.2-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <properties>
@@ -28,7 +28,7 @@
         <compatibility.version>1.0.0</compatibility.version>
 
         <bintray.package>netflix-addon</bintray.package>
-        <hystrix.version>1.5.8</hystrix.version>
+        <hystrix.version>1.5.13</hystrix.version>
     </properties>
 
     <build>
