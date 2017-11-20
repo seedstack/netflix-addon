@@ -126,6 +126,17 @@
                     <name>bintray</name>
                     <url>http://dl.bintray.com/seedstack/jars</url>
                 </repository>
+                <repository>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                    <id>bintray-netflix-maven</id>
+                    <name>bintray</name>
+                    <url>http://dl.bintray.com/netflixoss/maven</url>
+                </repository>
             </repositories>
         </profile>
     </profiles>
