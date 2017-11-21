@@ -1,0 +1,9 @@
+logging:
+  level: WARN
+  loggers:
+    org.seedstack.netflix.hystrix.internal.CoffigHystrixDynamicProperties: TRACE
+
+netflix:
+  hystrix:
+    properties:
+      command.default.execution.isolation.thread.timeoutInMilliseconds: 2000
