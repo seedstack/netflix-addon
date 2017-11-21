@@ -1,4 +1,4 @@
-# Version 1.0.2 (2017-11-31)
+# Version 1.1.0 (2017-11-31)
 
 * [new] [Hystrix properties](https://github.com/Netflix/Hystrix/wiki/Configuration#execution.isolation.thread.timeoutInMilliseconds) can now be set directly in SeedStack configuration. 
 * [chg] Updated Hystrix to 1.5.13
