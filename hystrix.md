@@ -1,6 +1,6 @@
 ---
 title: "Hystrix"
-parent: "Netflix"
+addon: "Netflix"
 repo: "https://github.com/seedstack/netflix-addon"
 weight: -1
 tags:
@@ -10,7 +10,8 @@ tags:
 zones:
     - Addons
 menu:
-    AddonNetflix:
+    Netflix:
+        parent: "contents" 
         weight: 30
 ---
 
