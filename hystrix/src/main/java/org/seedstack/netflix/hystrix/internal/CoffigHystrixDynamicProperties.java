@@ -1,5 +1,5 @@
-/**
- * Copyright (c) 2013-2016, The SeedStack authors <http://seedstack.org>
+/*
+ * Copyright © 2013-2018, The SeedStack authors <http://seedstack.org>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -52,7 +52,7 @@ public class CoffigHystrixDynamicProperties implements HystrixDynamicProperties 
         private T value;
 
         CoffigHystrixDynamicProperty(String name, Function<String, T> converter, T fallback) {
-            this.name = name.substring(8); // removes the hystrix. prefix
+            this.name = name;
             this.converter = converter;
             this.fallback = fallback;
             fetchValue();
@@ -74,7 +74,12 @@ public class CoffigHystrixDynamicProperties implements HystrixDynamicProperties 
         }
 
         private void fetchValue() {
+            // fetch the full name
             String valueAsString = properties.get(this.name);
+            if (valueAsString == null) {
+                // try the name without the hystrix prefix
+                valueAsString = properties.get(this.name.substring(8));
+            }
             this.value = valueAsString != null ? converter.apply(valueAsString) : fallback;
             LOGGER.trace("Fetched hystrix property {}: {}", this.name, this.value);
         }

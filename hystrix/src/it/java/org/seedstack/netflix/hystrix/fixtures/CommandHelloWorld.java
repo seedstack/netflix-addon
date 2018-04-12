@@ -1,5 +1,5 @@
-/**
- * Copyright (c) 2013-2016, The SeedStack authors <http://seedstack.org>
+/*
+ * Copyright © 2013-2018, The SeedStack authors <http://seedstack.org>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -7,16 +7,21 @@
  */
 package org.seedstack.netflix.hystrix.fixtures;
 
-import org.seedstack.netflix.hystrix.internal.annotation.HystrixCommand;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import org.seedstack.netflix.hystrix.HystrixCommand;
+import org.seedstack.seed.Bind;
 import rx.Observable;
-import rx.Subscriber;
 
-import java.util.concurrent.*;
-
+@Bind
 public class CommandHelloWorld {
 
-    @HystrixCommand(commandKey = "testCommand", groupKey = "testGroup")
-    public String helloWorld(String name) {
+    @HystrixCommand(commandKey = "testCommand", groupKey = "testGroup", fallbackMethod = "fallback2")
+    public String helloWorld(String name, boolean fail) {
+        if (fail) {
+            throw new IllegalArgumentException("I'm failing");
+        }
         return "Hello " + name + " !";
     }
 
@@ -26,6 +31,10 @@ public class CommandHelloWorld {
     }
 
     private String fallback(String name) {
+        return "Fallback : Hello " + name + " !";
+    }
+
+    private String fallback2(String name, boolean fail) {
         return "Fallback : Hello " + name + " !";
     }
 
@@ -41,11 +50,6 @@ public class CommandHelloWorld {
 
     public String nestedFallback2(String name) {
         return "nestedFallback2: Hello " + name + " !";
-    }
-
-    @HystrixCommand(fallbackMethod = "inexistantFallback")
-    public String fallbackError(String name) {
-        throw new RuntimeException("Fail, and fallback doesn't exist !");
     }
 
     @HystrixCommand(fallbackMethod = "fallbackInException")

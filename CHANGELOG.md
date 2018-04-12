@@ -1,6 +1,11 @@
+# Version 1.2.0 (2018-04-28)
+
+* [new] Support for metrics event stream servlet, allowing to connect the Hystrix dashboard to the application.
+* [chg] Commands are now detected at startup, failing fast if a problem is detected.
+
 # Version 1.1.0 (2017-11-24)
 
-* [new] [Hystrix properties](https://github.com/Netflix/Hystrix/wiki/Configuration#execution.isolation.thread.timeoutInMilliseconds) can now be set directly in SeedStack configuration. 
+* [new] [Hystrix properties](https://github.com/Netflix/Hystrix/wiki/Configuration) can now be set directly in SeedStack configuration. 
 * [chg] Updated Hystrix to 1.5.12
 * [chg] Remove unneeded dependency to Netflix Archaius in Hystrix module.  
 
