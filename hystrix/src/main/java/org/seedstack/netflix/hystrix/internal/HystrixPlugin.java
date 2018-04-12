@@ -1,5 +1,5 @@
-/**
- * Copyright (c) 2013-2016, The SeedStack authors <http://seedstack.org>
+/*
+ * Copyright © 2013-2018, The SeedStack authors <http://seedstack.org>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -8,21 +8,38 @@
 
 package org.seedstack.netflix.hystrix.internal;
 
+import static org.seedstack.shed.reflect.AnnotationPredicates.elementAnnotatedWith;
+
+import com.google.common.collect.Lists;
+import com.netflix.hystrix.contrib.metrics.eventstream.HystrixMetricsStreamServlet;
 import com.netflix.hystrix.strategy.HystrixPlugins;
 import io.nuun.kernel.api.plugin.InitState;
 import io.nuun.kernel.api.plugin.context.InitContext;
 import io.nuun.kernel.api.plugin.request.ClasspathScanRequest;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.kametic.specifications.Specification;
+import org.seedstack.netflix.hystrix.HystrixCommand;
 import org.seedstack.netflix.hystrix.HystrixConfig;
-import org.seedstack.netflix.hystrix.internal.annotation.HystrixCommand;
+import org.seedstack.seed.core.SeedRuntime;
 import org.seedstack.seed.core.internal.AbstractSeedPlugin;
+import org.seedstack.seed.web.spi.FilterDefinition;
+import org.seedstack.seed.web.spi.ListenerDefinition;
+import org.seedstack.seed.web.spi.ServletDefinition;
+import org.seedstack.seed.web.spi.WebProvider;
+import org.seedstack.shed.reflect.Classes;
 
-public class HystrixPlugin extends AbstractSeedPlugin {
-    private Collection<Class<?>> scannedClasses = new ArrayList<>();
-    private Specification<Class<?>> hystrixCommandSpecification = classMethodsAnnotatedWith(HystrixCommand.class);
+public class HystrixPlugin extends AbstractSeedPlugin implements WebProvider {
+    private final Specification<Class<?>> spec = classMethodsAnnotatedWith(HystrixCommand.class);
+    private final Collection<Class<?>> bindings = new ArrayList<>();
+    private final Map<Method, CommandDefinition> commands = new HashMap<>();
+    private HystrixConfig hystrixConfig;
 
     @Override
     public String name() {
@@ -30,24 +47,64 @@ public class HystrixPlugin extends AbstractSeedPlugin {
     }
 
     @Override
+    protected void setup(SeedRuntime seedRuntime) {
+        Classes.optional("com.netflix.hystrix.contrib.metrics.eventstream.HystrixMetricsStreamServlet")
+                .ifPresent(bindings::add);
+    }
+
+    @Override
     public Collection<ClasspathScanRequest> classpathScanRequests() {
         return classpathScanRequestBuilder()
-                .specification(hystrixCommandSpecification)
+                .specification(spec)
                 .build();
     }
 
     @Override
     protected InitState initialize(InitContext initContext) {
-        Map<Specification, Collection<Class<?>>> scannedClassesBySpecification = initContext
-                .scannedTypesBySpecification();
-        scannedClasses.addAll(scannedClassesBySpecification.get(hystrixCommandSpecification));
-        ((CoffigHystrixDynamicProperties) HystrixPlugins.getInstance().getDynamicProperties())
-                .setHystrixConfig(getConfiguration(HystrixConfig.class));
+        hystrixConfig = getConfiguration(HystrixConfig.class);
+        initContext.scannedTypesBySpecification().get(spec)
+                .forEach(c -> Classes.from(c)
+                        .traversingSuperclasses()
+                        .traversingInterfaces()
+                        .methods()
+                        .filter(m -> !Modifier.isAbstract(m.getModifiers()))
+                        .filter(elementAnnotatedWith(HystrixCommand.class, true))
+                        .forEach(m -> commands.put(m, new CommandDefinition(m))));
+
+        HystrixPlugins hystrixPlugins = HystrixPlugins.getInstance();
+
+        // Dynamic properties through Coffig
+        ((CoffigHystrixDynamicProperties) hystrixPlugins.getDynamicProperties()).setHystrixConfig(hystrixConfig);
+
         return InitState.INITIALIZED;
     }
 
     @Override
     public Object nativeUnitModule() {
-        return new HystrixModule(scannedClasses);
+        return new HystrixModule(bindings, Collections.unmodifiableMap(commands));
+    }
+
+    @Override
+    public List<ServletDefinition> servlets() {
+        ArrayList<ServletDefinition> servletDefinitions = Lists.newArrayList();
+        if (hystrixConfig.metrics().isEnabled()) {
+            ServletDefinition servletDefinition = new ServletDefinition(
+                    "HystrixMetricsStreamServlet",
+                    HystrixMetricsStreamServlet.class);
+            servletDefinition.addMappings(hystrixConfig.metrics().getServletPath());
+            servletDefinition.setAsyncSupported(true);
+            servletDefinitions.add(servletDefinition);
+        }
+        return servletDefinitions;
+    }
+
+    @Override
+    public List<FilterDefinition> filters() {
+        return Lists.newArrayList();
+    }
+
+    @Override
+    public List<ListenerDefinition> listeners() {
+        return Lists.newArrayList();
     }
 }

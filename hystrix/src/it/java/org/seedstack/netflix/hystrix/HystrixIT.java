@@ -1,28 +1,28 @@
-/**
- * Copyright (c) 2013-2016, The SeedStack authors <http://seedstack.org>
+/*
+ * Copyright © 2013-2018, The SeedStack authors <http://seedstack.org>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+
 package org.seedstack.netflix.hystrix;
-
-import com.google.inject.Inject;
-import com.netflix.hystrix.exception.HystrixRuntimeException;
-import org.junit.Test;
-import org.seedstack.netflix.hystrix.fixtures.CommandHelloWorld;
-import org.seedstack.seed.it.AbstractSeedIT;
-import rx.functions.Action1;
-
-import java.util.concurrent.Future;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
-public class HystrixIT extends AbstractSeedIT {
+import com.google.inject.Inject;
+import com.netflix.hystrix.exception.HystrixRuntimeException;
+import java.util.concurrent.Future;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.seedstack.netflix.hystrix.fixtures.CommandHelloWorld;
+import org.seedstack.seed.testing.junit4.internal.JUnit4Runner;
 
+@RunWith(JUnit4Runner.class)
+public class HystrixIT {
     @Inject
-    CommandHelloWorld command;
+    private CommandHelloWorld command;
 
     @Test
     public void commandIsInjected() {
@@ -31,7 +31,7 @@ public class HystrixIT extends AbstractSeedIT {
 
     @Test
     public void commandExecutesCorrectly() {
-        assertThat(command.helloWorld("test")).isEqualTo("Hello test !");
+        assertThat(command.helloWorld("test", false)).isEqualTo("Hello test !");
     }
 
     @Test
@@ -42,13 +42,6 @@ public class HystrixIT extends AbstractSeedIT {
     @Test
     public void nestedFallbacksAreSuccessful() throws Exception {
         assertThat(command.nestedCommand("bar")).isEqualTo("nestedFallback2: Hello bar !");
-    }
-
-    @Test
-    public void fallbackNotFound() throws Exception {
-        assertThatExceptionOfType(RuntimeException.class)
-                .isThrownBy(() -> command.fallbackError(""))
-                .withMessage("Fallback method not found: inexistantFallback([class java.lang.String])");
     }
 
     @Test
