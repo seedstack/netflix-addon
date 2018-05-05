@@ -1,4 +1,4 @@
-# Version 1.2.0 (2018-04-28)
+# Version 1.2.0 (2018-05-05)
 
 * [new] Support for metrics event stream servlet, allowing to connect the Hystrix dashboard to the application.
 * [chg] Commands are now detected at startup, failing fast if a problem is detected.

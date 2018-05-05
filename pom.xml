@@ -23,7 +23,7 @@
     <packaging>pom</packaging>
 
     <properties>
-        <seed.version>3.5.0</seed.version>
+        <seed.version>3.5.1</seed.version>
 
         <compatibility.version>1.0.0</compatibility.version>
 
@@ -58,14 +58,18 @@
                             <licenseMerge>Apache 2|Apache License 2.0</licenseMerge>
                             <licenseMerge>Apache 2|Apache License, version 2.0</licenseMerge>
                             <licenseMerge>Apache 2|Apache License Version 2.0</licenseMerge>
+                            <licenseMerge>Apache 2|Apache 2.0</licenseMerge>
                             <licenseMerge>BSD|The New BSD License</licenseMerge>
                             <licenseMerge>CDDL|CDDL + GPLv2 with classpath exception</licenseMerge>
                             <licenseMerge>CDDL|Common Development and Distribution License</licenseMerge>
                             <licenseMerge>EPL|Eclipse Public License - v 1.0</licenseMerge>
                             <licenseMerge>LGPL 3.0|GNU Lesser Public License</licenseMerge>
+                            <licenseMerge>MIT License|The MIT License</licenseMerge>
+                            <licenseMerge>MIT License|MIT license</licenseMerge>
                             <licenseMerge>Public Domain|Public Domain, per Creative Commons CC0</licenseMerge>
                             <licenseMerge>IGNORED_LICENSE|MPL 1.1</licenseMerge>
                             <licenseMerge>IGNORED_LICENSE|LGPL 2.1</licenseMerge>
+                            <licenseMerge>IGNORED_LICENSE|GNU General Public License, version 2 (GPL2), with the classpath exception</licenseMerge>
                         </licenseMerges>
                     </configuration>
                 </plugin>
