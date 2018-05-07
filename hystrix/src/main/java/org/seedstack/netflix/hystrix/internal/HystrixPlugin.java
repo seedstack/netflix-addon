@@ -34,12 +34,16 @@ import org.seedstack.seed.web.spi.ListenerDefinition;
 import org.seedstack.seed.web.spi.ServletDefinition;
 import org.seedstack.seed.web.spi.WebProvider;
 import org.seedstack.shed.reflect.Classes;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class HystrixPlugin extends AbstractSeedPlugin implements WebProvider {
+    private static final Logger LOGGER = LoggerFactory.getLogger(HystrixPlugin.class);
     private final Specification<Class<?>> spec = classMethodsAnnotatedWith(HystrixCommand.class);
     private final Collection<Class<?>> bindings = new ArrayList<>();
     private final Map<Method, CommandDefinition> commands = new HashMap<>();
     private HystrixConfig hystrixConfig;
+    private boolean metricsPresent;
 
     @Override
     public String name() {
@@ -49,7 +53,10 @@ public class HystrixPlugin extends AbstractSeedPlugin implements WebProvider {
     @Override
     protected void setup(SeedRuntime seedRuntime) {
         Classes.optional("com.netflix.hystrix.contrib.metrics.eventstream.HystrixMetricsStreamServlet")
-                .ifPresent(bindings::add);
+                .ifPresent(c -> {
+                    metricsPresent = true;
+                    bindings.add(c);
+                });
     }
 
     @Override
@@ -87,13 +94,14 @@ public class HystrixPlugin extends AbstractSeedPlugin implements WebProvider {
     @Override
     public List<ServletDefinition> servlets() {
         ArrayList<ServletDefinition> servletDefinitions = Lists.newArrayList();
-        if (hystrixConfig.metrics().isEnabled()) {
+        if (metricsPresent && hystrixConfig.metrics().isEnabled()) {
             ServletDefinition servletDefinition = new ServletDefinition(
                     "HystrixMetricsStreamServlet",
                     HystrixMetricsStreamServlet.class);
             servletDefinition.addMappings(hystrixConfig.metrics().getServletPath());
             servletDefinition.setAsyncSupported(true);
             servletDefinitions.add(servletDefinition);
+            LOGGER.info("Hystrix metrics stream exposed on " + hystrixConfig.metrics().getServletPath());
         }
         return servletDefinitions;
     }
