@@ -1,3 +1,7 @@
+# Version 1.2.2 (2020-08-05)
+
+* [chg] Updated Hystrix to 1.5.18.
+
 # Version 1.2.1 (2018-05-07)
 
 * [new] Fix class not found when `hystrix-metrics-event-stream` JAR is not on the classpath. 
