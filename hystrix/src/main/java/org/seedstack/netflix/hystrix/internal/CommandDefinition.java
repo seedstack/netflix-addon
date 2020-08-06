@@ -7,14 +7,14 @@
  */
 package org.seedstack.netflix.hystrix.internal;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import com.google.common.base.Strings;
-import java.lang.reflect.Method;
-import java.util.Arrays;
-import org.apache.commons.lang.StringUtils;
 import org.seedstack.netflix.hystrix.HystrixCommand;
 import org.seedstack.shed.reflect.Classes;
+
+import java.lang.reflect.Method;
+import java.util.Arrays;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 class CommandDefinition {
     private final Method commandMethod;
@@ -61,7 +61,7 @@ class CommandDefinition {
     }
 
     private Method resolveFallbackMethod(HystrixCommand hystrixCommand) {
-        if (StringUtils.isNotBlank(hystrixCommand.fallbackMethod())) {
+        if (!Strings.isNullOrEmpty(hystrixCommand.fallbackMethod())) {
             Class<?>[] parameterTypes = commandMethod.getParameterTypes();
             return Classes.from(commandMethod.getDeclaringClass())
                     .traversingSuperclasses()
